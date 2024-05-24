@@ -1,0 +1,16 @@
+{% extends 'navbar1.html' %}
+
+{% block head %}
+  <title>{% block title %}Keranjang - Minerva Shop{% endblock %}</title>
+{% endblock %}
+
+{% block keranjang_content %}
+<body>
+  <h2 class="keranjang">Keranjang</h2>
+  <ul>
+      {% for item in session.get('keranjang', []) %}
+          <li>{{ item.nama_barang }} - {{ item.harga | format_harga }}</li>
+      {% endfor %}
+  </ul>
+</body>
+{% endblock %}

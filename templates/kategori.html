@@ -1,0 +1,63 @@
+{% extends 'navbar3.html' %} {% block head %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>{% block title %}Daftar Barang - {{ kategori }}{% endblock %}</title>
+{% endblock %} {% block kategori_content %}
+<main class="container-product">
+  <h2>Daftar Barang - {{ kategori }}</h2>
+  <!-- Tambahkan form pencarian -->
+  <form
+    method="GET"
+    action="{{ url_for('show_by_category', kategori=kategori) }}"
+    class="search-form mb-3"
+  >
+    <input
+      class="form-control"
+      type="search"
+      name="search"
+      placeholder="Cari disini"
+      aria-label="Search"
+      value="{{ search_query }}"
+    />
+    <button class="btn btn-outline-warning" type="submit">Search</button>
+  </form>
+  {% if search_query %}
+  <p>Hasil pencarian untuk: {{ search_query }}</p>
+  {% endif %}
+  <div class="barang-container">
+    {% for product in data %}
+    <div class="product-container">
+      <div class="product-image">
+        <img src="{{ product.image }}" alt="{{ product.nama_barang }}" />
+      </div>
+      <div class="product-details">
+        <div class="product-title">{{ product.nama_barang }}</div>
+        <div class="product-description">{{ product.deskripsi }}</div>
+        <div class="product-price">Rp.{{ product.harga | format_harga }}</div>
+        <form method="post" action="{{ url_for('tambah_ke_keranjang') }}">
+          <input
+            type="hidden"
+            name="nama_barang"
+            value="{{ product.nama_barang }}"
+          />
+          <input type="hidden" name="harga" value="{{ product.harga }}" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+        
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+<script>
+  function tambahKeKeranjang(nama_barang, harga) {
+    // Logika untuk menambahkan barang ke keranjang (gunakan AJAX jika ingin update tanpa me-refresh halaman)
+    alert(
+      "Barang berhasil ditambahkan ke keranjang: " +
+        nama_barang +
+        " - Harga: " +
+        harga
+    );
+  }
+</script>
+{% endblock %}

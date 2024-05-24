@@ -1,0 +1,68 @@
+{% extends 'navbar2.html' %}
+
+{% block head %}
+<title>{% block title %}Minerva Shop - Product{% endblock %}</title>
+<link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" />
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  rel="stylesheet"
+  integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+  crossorigin="anonymous"
+/>
+{% endblock %}
+
+{% block product_content %}
+<main class="container-product">
+  <h2>Daftar Barang</h2>
+  <form
+    class="mb-3"
+    role="search"
+    action="{{ url_for('daftar_barang') }}"
+    method="GET"
+  >
+    <div class="input-group">
+      <input
+        type="search"
+        name="search"
+        class="form-control"
+        placeholder="Cari disini"
+        aria-label="Search"
+      />
+      <button type="submit" class="btn btn-outline-warning">Search</button>
+    </div>
+  </form>
+  {% if search_query %}
+  <p>Hasil pencarian untuk: {{ search_query }}</p>
+  {% endif %}
+  <div class="barang-container">
+    {% for product in data %}
+    <div class="product-container">
+      <div class="product-image">
+        <img src="{{ product.image }}" alt="{{ product.nama_barang }}" />
+      </div>
+      <div class="product-details">
+        <div class="product-title">{{ product.nama_barang }}</div>
+        <div class="product-description">{{ product.deskripsi }}</div>
+        <div class="product-price">Rp.{{ product.harga | format_harga }}</div>
+        <form method="post" action="{{ url_for('tambah_ke_keranjang') }}">
+          <input
+            type="hidden"
+            name="nama_barang"
+            value="{{ product.nama_barang }}"
+          />
+          <input type="hidden" name="harga" value="{{ product.harga }}" />
+          <button type="submit" class="add-to-cart-btn">Add to Cart</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+<script>
+  function tambahKeKeranjang(nama_barang, harga) {
+    alert(
+      "Barang berhasil ditambahkan ke keranjang: " + nama_barang + " - Harga: " + harga
+      );
+  }
+</script>
+{% endblock %}
